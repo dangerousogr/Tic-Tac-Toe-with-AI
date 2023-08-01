@@ -2,16 +2,23 @@ import random
 """ define constants here, EMPTY to define empty cells, input list to search through X and O """
 EMPTY_CELL = ' '
 INPUT_LIST = ('X','O')
+input_list2 = (0,1,2)
 
 
 def display_board(board):
     """Prints the current state of the board."""
-    print('-------------')
+    if board == sample_board:
+        print('-------------------')    
+    else:
+        print('-------------')
     for row in board:
         print('|', end=' ')
         for cell in row:
             print(cell, end=' | ')
-        print('\n-------------')
+        if board == sample_board:
+            print('\n------------------')
+        else:
+            print('\n-------------')
 
 
 def check_if_full(board):
@@ -193,9 +200,12 @@ def play_game():
             tie_counter = 0
 
         """Plays the Tic Tac Toe game."""
+        
+        
+        
         board = [[EMPTY_CELL, EMPTY_CELL, EMPTY_CELL],
-              [EMPTY_CELL, EMPTY_CELL, EMPTY_CELL],
-              [EMPTY_CELL, EMPTY_CELL, EMPTY_CELL]]
+                 [EMPTY_CELL, EMPTY_CELL, EMPTY_CELL],
+                 [EMPTY_CELL, EMPTY_CELL, EMPTY_CELL]]
         display_board(board)
 
         if counter == 1:
@@ -219,7 +229,15 @@ def play_game():
 
             # Player's turn
             row = int(input("Select the row (0-2): "))
+            if row not in input_list2:
+                print("Please select from 0 to 2")
+                continue
+            
             col = int(input("Select the column (0-2): "))
+            if col not in input_list2:
+                print("Please select from 0 to 2")
+                continue
+
 
             if board[row][col] != EMPTY_CELL:
                 print("Invalid move. Please choose again:")
@@ -261,4 +279,9 @@ def play_game():
 """ get the user name for some added humanization of the game """
 global user1
 user1 = input("Hello, Welcome to Tic Tac Toe against AI! What is your name? ")
+global sample_board
+sample_board = [[('0,0'), ('0,1'), ('0,2')],
+                [('1,0'), ('1,1'), ('1,2')],
+                [('2,0'), ('2,1'), ('2,2')]]
+display_board(sample_board)
 play_game()
