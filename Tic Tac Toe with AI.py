@@ -3,6 +3,13 @@ import random
 EMPTY_CELL = ' '
 INPUT_LIST = ('X','O')
 input_list2 = (0,1,2)
+global user1
+global player_win_counter
+global comp_win_counter
+global draw_counter
+player_win_counter = 0
+comp_win_counter = 0
+draw_counter = 0
 
 
 def display_board(board):
@@ -19,14 +26,6 @@ def display_board(board):
             print('\n------------------')
         else:
             print('\n-------------')
-
-
-def check_if_full(board):
-    """Checks if the board is full."""
-    for row in board:
-        if EMPTY_CELL in row:
-            return False
-    return True
 
 
 def get_empty_cells_list(board):
@@ -58,6 +57,13 @@ def who_is_winner(board, player):
         return True
 
     return False
+
+def check_if_full(board):
+    """Checks if the board is full."""
+    for row in board:
+        if EMPTY_CELL in row:
+            return False
+    return True
 
 
 def check_board_stat(board):
@@ -169,35 +175,41 @@ def get_player_ai_mark():
     return HUMAN_PLAYER, COMP_PLAYER
 
 
+
+
+
 def play_game():
     """ main function to play the game, a loop to repeat the game with error handling in place, counter to increment difficulty """
     play_again = "Y"
     counter = 0
-    win_counter = 0
-    tie_counter = 0
+    win_counter_reset = 0
+    tie_counter_reset = 0
+    global player_win_counter
+    global comp_win_counter
+    global draw_counter
    #flag = True
     while play_again == "Y":
 
 
         counter += 1
 
-        if win_counter >= 2:
+        if win_counter_reset >= 2:
           player_in = input("%s, it looks like the AI is beating you quite easily, would you like to tone down the difficulty? Y/N " %user1)
           reset_diff = player_in.upper()
           if reset_diff == "Y":
             counter = 1
 
-            win_counter = 0
+            win_counter_reset = 0
 
         #print(counter)  #debug
 
 
-        if tie_counter >= 2:
+        if tie_counter_reset >= 2:
           player_in2 = input("%s, it looks like you are having a tough time with playing against AI, would you like to tone down the difficulty? Y/N " %user1)
           reset_diff = player_in2.upper()
           if reset_diff == "Y":
             counter = 1
-            tie_counter = 0
+            tie_counter_reset = 0
 
         """Plays the Tic Tac Toe game."""
         
@@ -249,11 +261,13 @@ def play_game():
 
             if who_is_winner(board, HUMAN_PLAYER):
                 print("Congrats %s, you win!" %user1)
+                player_win_counter += 1
                 break
 
             if check_if_full(board):
                 print("No winner, no loser. It is a draw!")
-                tie_counter += 1
+                tie_counter_reset += 1
+                draw_counter += 1
                 break
 
             # Computer's turn
@@ -264,24 +278,28 @@ def play_game():
 
             if who_is_winner(board, COMP_PLAYER):
                 print("The computer has bested you!")
-                win_counter += 1
+                win_counter_reset += 1
+                comp_win_counter += 1
                 break
 
             if check_if_full(board):
                 print("No winner, no loser. It is a draw!")
                 break
 
-        next_round = input("Do you wish to play again? Y/N \n")
+        next_round = input("Do you wish to play again? Select Y to confirm replay \n")
         play_again = next_round.upper()
+        
+    print("Hi " +str(user1) + ", you have won " + str(player_win_counter) + " times, Computer has won " +str(comp_win_counter) + " times and you have tied with computer " + str(draw_counter) + " times!")
     print("Thanks for playing, have a nice day!")
 
 # Start the game
 """ get the user name for some added humanization of the game """
-global user1
-user1 = input("Hello, Welcome to Tic Tac Toe against AI! What is your name? ")
+
+user1 = input("Hello, Welcome to Tic Tac Toe against AI! What is your name? ")          
 global sample_board
 sample_board = [[('0,0'), ('0,1'), ('0,2')],
                 [('1,0'), ('1,1'), ('1,2')],
                 [('2,0'), ('2,1'), ('2,2')]]
 display_board(sample_board)
+
 play_game()
